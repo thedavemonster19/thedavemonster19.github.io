@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["8LKQ8AX6U6.UnbeholdenWealth.PokerHost"],
+        "components": [
+          { "/": "/join", "comment": "Group invite link" },
+          { "/": "/join/*", "comment": "Group invite link (sub-paths)" }
+        ]
+      }
+    ]
+  }
+}
