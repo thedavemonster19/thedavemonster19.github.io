@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111416"><meta name="description" content="Replay your reviewed poker hands step by step, with a pause and coaching note at each decision worth changing."><title>Kaizen GTO — Hand reviews</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="review-replay.css">
+<style>
+.kz-review{max-width:1240px;margin:auto;padding:24px 32px 48px;display:flex;flex-direction:column;gap:18px}
+.kz-review h1{margin:4px 0 0;font-size:30px;line-height:1.15}
+.kz-review .lede{margin:6px 0 0;color:var(--muted);max-width:70ch}
+.kz-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kz-tools label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.kz-tools select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px 10px;max-width:60vw}
+.kz-file{position:relative;border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer;color:var(--text)!important}
+.kz-file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.kz-file:focus-within{outline:2px solid var(--lime);outline-offset:3px}
+.kz-tools button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:7px 12px}
+#rv-status{font-size:13px;color:var(--muted);margin-left:auto}
+#rv-status.err{color:var(--red)}
+.kz-review .rr{--rr-bg:var(--bg);--rr-surface:var(--panel);--rr-ink:var(--text);--rr-muted:var(--muted);--rr-line:var(--line);
+ --rr-felt:#1d4a3f;--rr-felt-edge:#0f2a23;--rr-felt-ink:#e6f0ec;--rr-gold:var(--lime);--rr-gold-soft:#262d16;
+ --rr-bad:var(--red);--rr-bad-soft:#35191b;--rr-ok:var(--green);--rr-ok-soft:#14291f;--rr-card:#f4f6f5;
+ --rr-display:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--rr-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.kz-review .rr-tab,.kz-review .rr-coach h2,.kz-review .rr-pos{font-weight:700;letter-spacing:.01em}
+a.nav{text-decoration:none;display:flex;align-items:center}
+@media (max-width:700px){.kz-review{padding:16px}header{gap:20px;padding:0 16px}}
+</style></head>
+<body>
+<header><a class="brand" href="./"><span class="brand-icon">♠</span> KAIZEN<span>GTO</span></a><nav aria-label="Main"><a class="nav" href="./">Play</a><a class="nav active" href="review.html" aria-current="page">Hand reviews</a></nav></header>
+<main class="kz-review">
+ <div><span class="eyebrow">HAND REVIEWS</span><h1>Replay the hands that cost you</h1><p class="lede">Step through a reviewed hand on the table. The replay pauses at each decision worth changing and shows what you did, the better play and the price you were getting. Packs you import stay in this browser.</p></div>
+ <div class="kz-tools">
+  <label for="rv-pack">Review</label><select id="rv-pack"></select>
+  <label class="kz-file" for="rv-file">Import review pack (.json)<input type="file" id="rv-file" accept=".json,application/json"></label>
+  <button id="rv-remove" type="button">Remove this review</button>
+  <span id="rv-status" role="status"></span>
+ </div>
+ <div id="rv-app"></div>
+</main>
+<script src="review-replay.js"></script><script src="review-page.js"></script>
+</body></html>

@@ -181,4 +181,4 @@
 #street-bets{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:3px 12px;font-size:14px;line-height:1.4}
 .street-bet{white-space:nowrap}.street-bet>span{color:#bacdc5}.street-bet strong{color:#edf3f2;font-variant-numeric:tabular-nums}.no-street-bets{color:var(--muted)}
 @media(max-width:600px){.table-totals{gap:8px;padding:6px 8px;margin-top:4px;align-items:center}.table-totals .pot strong{font-size:15px}.table-totals .pot-cash{display:none}#street-bets{gap:2px 8px;font-size:14px}.guided-active .table-wrap{height:225px;min-height:220px}.table-center,.nine .table-center{top:38%}}
-@media(max-width:360px){.table-totals{flex-wrap:wrap}.street-contributions{text-align:left;flex:1 1 100%}#street-bets{justify-content:flex-start}}
+@media(max-width:360px){.table-totals{flex-wrap:wrap}.street-contributions{text-align:left;flex:1 1 100%}#street-bets{justify-content:flex-start}}a.nav{text-decoration:none;display:flex;align-items:center}

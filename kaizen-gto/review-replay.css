@@ -1,0 +1,75 @@
+/* Coached hand replay. Tokens live on .rr so a host page can remap them (Kaizen GTO maps them to its dark theme). */
+.rr{
+ --rr-bg:#EEF1EF;--rr-surface:#FFFFFF;--rr-ink:#16201C;--rr-muted:#5A6862;--rr-line:#D5DDD9;
+ --rr-felt:#1F5A4C;--rr-felt-edge:#14392F;--rr-felt-ink:#E6F0EC;
+ --rr-gold:#A8740F;--rr-gold-soft:#FBF1DC;--rr-bad:#B8452E;--rr-bad-soft:#F8E6E0;--rr-ok:#2E7D53;--rr-ok-soft:#E3F1E8;
+ --rr-card:#FFFFFF;--rr-s:#1B1F23;--rr-h:#C4302B;--rr-d:#1F5FBF;--rr-cl:#2F8A3B;
+ --rr-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;--rr-sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--rr-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+ display:flex;flex-direction:column;gap:14px;color:var(--rr-ink);font:15px/1.55 var(--rr-sans)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rr{
+ --rr-bg:#0E1412;--rr-surface:#16201D;--rr-ink:#E3EBE7;--rr-muted:#9AAAA3;--rr-line:#26332E;--rr-felt:#1B4D41;--rr-felt-edge:#0F2A23;--rr-felt-ink:#DCEAE4;
+ --rr-gold:#E3AE4A;--rr-gold-soft:#2B2414;--rr-bad:#E58A72;--rr-bad-soft:#2C1A14;--rr-ok:#6CC596;--rr-ok-soft:#14261C;--rr-card:#F4F6F5}}
+:root[data-theme="dark"] .rr{
+ --rr-bg:#0E1412;--rr-surface:#16201D;--rr-ink:#E3EBE7;--rr-muted:#9AAAA3;--rr-line:#26332E;--rr-felt:#1B4D41;--rr-felt-edge:#0F2A23;--rr-felt-ink:#DCEAE4;
+ --rr-gold:#E3AE4A;--rr-gold-soft:#2B2414;--rr-bad:#E58A72;--rr-bad-soft:#2C1A14;--rr-ok:#6CC596;--rr-ok-soft:#14261C;--rr-card:#F4F6F5}
+.rr *{box-sizing:border-box}
+.rr-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.rr-tab{font:600 15px/1.2 var(--rr-display);letter-spacing:.04em;padding:9px 14px;border:1px solid var(--rr-line);background:var(--rr-surface);color:var(--rr-ink);border-radius:999px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.rr-tab small{font:500 12px var(--rr-mono);color:var(--rr-bad)}
+.rr-tab[aria-selected="true"]{background:var(--rr-ink);color:var(--rr-bg);border-color:var(--rr-ink)}.rr-tab[aria-selected="true"] small{color:var(--rr-bg)}
+.rr button:focus-visible{outline:2px solid var(--rr-gold);outline-offset:2px}
+.rr-main{display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-areas:"stage rail" "log rail";gap:16px;align-items:start}
+.rr-stage{grid-area:stage;display:flex;flex-direction:column;gap:12px;min-width:0}.rr-rail{grid-area:rail;display:flex;flex-direction:column;gap:12px;min-width:0}.rr-log{grid-area:log}
+@media (max-width:900px){.rr-main{grid-template-columns:minmax(0,1fr);grid-template-areas:"stage" "rail" "log"}}
+.rr-table{position:relative;width:100%;aspect-ratio:16/10;max-width:100%}
+.rr-felt{position:absolute;inset:9% 10%;border-radius:999px;background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--rr-felt) 88%,white) 0%,var(--rr-felt) 60%,var(--rr-felt-edge) 100%);box-shadow:inset 0 0 0 10px var(--rr-felt-edge),0 10px 30px rgba(0,0,0,.18)}
+.rr-center{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--rr-felt-ink)}
+.rr-street{font:600 12px/1 var(--rr-display);letter-spacing:.18em;text-transform:uppercase;opacity:.8;min-height:12px}
+.rr-board{display:flex;gap:5px;min-height:52px}
+.rr-pot{font:500 14px var(--rr-mono);background:rgba(0,0,0,.28);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.rr-seat{position:absolute;transform:translate(-50%,-50%);width:clamp(92px,15%,132px);background:var(--rr-surface);border:1px solid var(--rr-line);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column;gap:3px;transition:opacity .2s,box-shadow .2s;font-size:12px}
+.rr-top,.rr-mid{display:flex;justify-content:space-between;align-items:baseline;gap:4px}
+.rr-pos{font:700 13px/1 var(--rr-display);letter-spacing:.06em}
+.rr-name{color:var(--rr-muted);font:11px var(--rr-mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.rr-act{font:600 11px/1.2 var(--rr-sans);color:var(--rr-gold);white-space:nowrap}
+.rr-stack{font:500 12px var(--rr-mono);font-variant-numeric:tabular-nums}
+.rr-hole{display:flex;gap:3px}.rr-hole:empty{display:none}
+.rr-hero{border-color:var(--rr-gold);box-shadow:0 0 0 1px var(--rr-gold)}
+.rr-folded{opacity:.38}.rr-acting{box-shadow:0 0 0 3px var(--rr-gold)}
+.rr-chip{position:absolute;transform:translate(-50%,-50%);font:500 12px var(--rr-mono);background:var(--rr-gold-soft);color:var(--rr-ink);border:1px solid var(--rr-gold);padding:1px 7px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rr-c{width:38px;height:52px;border-radius:6px;background:var(--rr-card);border:1px solid rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 19px/1 var(--rr-sans);box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.rr-c span{font-size:15px;line-height:1}
+.rr-seat .rr-c{width:26px;height:34px;font-size:13px;border-radius:4px}.rr-seat .rr-c span{font-size:11px}
+.rr-back{background:repeating-linear-gradient(45deg,var(--rr-felt-edge) 0 4px,var(--rr-felt) 4px 8px);border-color:var(--rr-felt-edge)}
+/* GGPoker four-colour deck */
+.rr-suit-s{color:var(--rr-s)}.rr-suit-h{color:var(--rr-h)}.rr-suit-d{color:var(--rr-d)}.rr-suit-c{color:var(--rr-cl)}
+@media (max-width:560px){.rr-table{aspect-ratio:4/5}.rr-felt{inset:12% 6%}.rr-seat{width:94px;padding:5px 6px}.rr-c{width:30px;height:42px;font-size:15px}.rr-c span{font-size:12px}}
+.rr-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rr-btn{font:600 14px/1 var(--rr-sans);padding:10px 14px;border-radius:8px;border:1px solid var(--rr-line);background:var(--rr-surface);color:var(--rr-ink);cursor:pointer;min-height:40px}
+.rr-primary{background:var(--rr-ink);color:var(--rr-bg);border-color:var(--rr-ink)}
+.rr-btn:disabled{opacity:.4;cursor:default}
+.rr-progress{flex:1 1 160px;font:12px var(--rr-mono);color:var(--rr-muted);text-align:right}
+.rr-log{background:var(--rr-surface);border:1px solid var(--rr-line);border-radius:10px;padding:10px 14px;font:13px/1.6 var(--rr-mono);max-height:180px;overflow:auto;min-width:0}
+.rr-log div{white-space:pre-wrap}.rr-now{font-weight:500}.rr-past{color:var(--rr-muted)}
+.rr-hd{font:600 11px var(--rr-display);letter-spacing:.14em;text-transform:uppercase;color:var(--rr-gold);margin-top:4px}
+.rr-coach{background:var(--rr-surface);border:1px solid var(--rr-line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.rr-coach h2{font:700 22px/1.1 var(--rr-display);margin:0;letter-spacing:.02em;text-wrap:balance}
+.rr-coach p{margin:0}
+.rr-mistake{border-color:var(--rr-bad);box-shadow:inset 4px 0 0 var(--rr-bad)}
+.rr-note{border-color:var(--rr-ok);box-shadow:inset 4px 0 0 var(--rr-ok)}
+.rr-earlier{opacity:.6;box-shadow:none}
+.rr-tag{align-self:flex-start;font:600 11px/1 var(--rr-display);letter-spacing:.14em;text-transform:uppercase;padding:4px 8px;border-radius:4px}
+.rr-bad{background:var(--rr-bad-soft);color:var(--rr-bad)}.rr-ok{background:var(--rr-ok-soft);color:var(--rr-ok)}.rr-gold{background:var(--rr-gold-soft);color:var(--rr-gold)}
+.rr-vs{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px;margin:0}
+.rr-vs dt{color:var(--rr-muted);font:600 12px/1.6 var(--rr-display);letter-spacing:.1em;text-transform:uppercase}
+.rr-vs dd{margin:0}.rr-better{font-weight:600;color:var(--rr-ok)}.rr-did{text-decoration:line-through;text-decoration-color:var(--rr-bad);color:var(--rr-muted)}
+.rr-odds{font:13px var(--rr-mono);background:var(--rr-gold-soft);padding:6px 10px;border-radius:6px;font-variant-numeric:tabular-nums}
+.rr-result{font:500 14px var(--rr-mono)}
+.rr-moments{background:var(--rr-surface);border:1px solid var(--rr-line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.rr-moments h3{font:600 12px/1 var(--rr-display);letter-spacing:.16em;text-transform:uppercase;color:var(--rr-muted);margin:2px 4px 6px}
+.rr-mlist{display:flex;flex-direction:column;gap:2px}
+.rr-moment{display:flex;gap:10px;align-items:baseline;text-align:left;background:none;border:0;padding:6px;border-radius:6px;cursor:pointer;color:var(--rr-ink);font:14px/1.35 var(--rr-sans)}
+.rr-moment:hover{background:var(--rr-bg)}.rr-moment.rr-on{background:var(--rr-gold-soft)}
+.rr-moment i{font-style:normal;width:10px;height:10px;border-radius:50%;flex:none;transform:translateY(1px)}
+.rr-m{background:var(--rr-bad)}.rr-n{background:var(--rr-ok)}
+@media (prefers-reduced-motion:reduce){.rr *{transition:none!important}}
